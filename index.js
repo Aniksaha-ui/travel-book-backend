@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 const port = process.env.PORT || 4000;
 const bannerHandler = require("./router/bannerHandler");
+const tourHandler = require("./router/tourHandler");
 app.use(cors());
 app.use(express.json());
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/banner", bannerHandler);
+app.use("/tour", tourHandler);
 
 app.listen(port, (a) => {
   // console.log(a);
