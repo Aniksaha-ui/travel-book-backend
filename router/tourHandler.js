@@ -30,7 +30,7 @@ router.get("/popular", async (req, res) => {
 router.get("/description/:id", async (req, res) => {
   const id = req.params.id;
   const tourDescription = await Tour.find({ _id: id });
-  res.send({ tourDescription });
+  res.send({ tour: tourDescription });
 });
 
 module.exports = router;
