@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 const bannerHandler = require("./router/bannerHandler");
 const tourHandler = require("./router/tourHandler");
+const bookingHandler = require("./router/bookingHandler");
 app.use(cors());
 app.use(express.json());
 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 
 app.use("/banner", bannerHandler);
 app.use("/tour", tourHandler);
+app.use("/booking", bookingHandler);
 
 app.listen(port, (a) => {
   // console.log(a);
