@@ -18,4 +18,16 @@ router.post("/", async (req, res) => {
   }
   //   console.log(req.body);
 });
+
+router.get("/:email", async (req, res) => {
+  const email = req.params.email;
+  console.log(email);
+  const bookingList = await Booking.find({ email: email });
+  if (bookingList) {
+    res.send(bookingList);
+  } else {
+    res.send({ message: "No data found" });
+  }
+});
+
 module.exports = router;
