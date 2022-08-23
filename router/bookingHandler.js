@@ -8,6 +8,7 @@ require("dotenv").config();
 // book a tour
 
 router.post("/", async (req, res) => {
+  console.log(req.body);
   const book = new Booking(req.body);
   const bookingList = await book.save();
   if (bookingList) {
