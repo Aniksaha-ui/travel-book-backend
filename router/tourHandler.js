@@ -7,7 +7,13 @@ require("dotenv").config();
 
 //upcomeing tour
 router.get("/upcomeing", async (req, res) => {
-  const tour = await Tour.find({ status: "upcomeing" });
+  const tour = await Tour.find(
+    { status: "upcomeing" },
+    ["name", "availableSeat", "code"],
+    {
+      sort: { availableSeat: -1 },
+    }
+  );
   if (tour.length > 0) {
     res.send(tour);
   } else {
