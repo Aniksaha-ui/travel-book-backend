@@ -9,7 +9,7 @@ require("dotenv").config();
 router.get("/upcomeing", async (req, res) => {
   const tour = await Tour.find(
     { status: "upcomeing" },
-    ["name", "availableSeat", "code"],
+    ["name", "availableSeat"],
     {
       sort: { availableSeat: -1 },
     }
