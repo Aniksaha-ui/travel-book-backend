@@ -6,7 +6,11 @@ const app = express();
 const port = process.env.PORT || 4000;
 const bannerHandler = require("./router/bannerHandler");
 const tourHandler = require("./router/tourHandler");
+const userHandler = require("./router/userHandler");
 const bookingHandler = require("./router/bookingHandler");
+const blogHandler = require("./router/blogHandler");
+// const subscribeHandler = require("./router/subscribeHandler");
+
 app.use(cors());
 app.use(express.json());
 
@@ -29,6 +33,8 @@ app.get("/", (req, res) => {
 app.use("/banner", bannerHandler);
 app.use("/tour", tourHandler);
 app.use("/booking", bookingHandler);
+app.use("/user", userHandler);
+app.use("/blog", blogHandler);
 
 app.listen(port, (a) => {
   // console.log(a);
