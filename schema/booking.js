@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const bookingSchema = mongoose.Schema({
+  tourId: {
+    type: String,
+  },
   tourName: {
     type: String,
     required: true,
@@ -17,8 +20,12 @@ const bookingSchema = mongoose.Schema({
     required: true,
   },
   price: {
-    type: String,
+    type: Number,
     required: true,
+  },
+  completed: {
+    type: String,
+    default: "no",
   },
 });
 
