@@ -62,15 +62,18 @@ router.get("/bookingDetails/:id", async (req, res) => {
   res.send({ data: bookingDetails });
 });
 
-//for my booking where payement is not done
-router.get("/:email", verifyJWT, async (req, res) => {
+//pending payment tours where payment status is pending
+router.get("/pending-booking/:email", verifyJWT, async (req, res) => {
+  console.log("hitted");
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
-  console.log(email);
   if (email === decodedEmail) {
-    const bookingList = await Booking.find({ email: email, payment: "no" });
+    const bookingList = await Booking.find({
+      email: email,
+      payment: "pending",
+    });
     if (bookingList) {
-      console.log(bookingList);
+      console.log(bookingList, "booking list");
       res.send({ data: bookingList });
     } else {
       res.send({ message: "No data found" });
@@ -81,7 +84,7 @@ router.get("/:email", verifyJWT, async (req, res) => {
 });
 
 //yes payment tours
-router.get("/pending/:email", verifyJWT, async (req, res) => {
+router.get("/upcomeing-booking/:email", verifyJWT, async (req, res) => {
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
   console.log(email);
@@ -98,16 +101,13 @@ router.get("/pending/:email", verifyJWT, async (req, res) => {
   }
 });
 
-//pending payment tours where payment status is pending
-router.get("/pending/:email", verifyJWT, async (req, res) => {
+//for my booking where payement is not done
+router.get("/:email", verifyJWT, async (req, res) => {
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
   console.log(email);
   if (email === decodedEmail) {
-    const bookingList = await Booking.find({
-      email: email,
-      payment: "pending",
-    });
+    const bookingList = await Booking.find({ email: email, payment: "no" });
     if (bookingList) {
       console.log(bookingList);
       res.send({ data: bookingList });
