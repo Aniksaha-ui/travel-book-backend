@@ -23,6 +23,10 @@ const bookingSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  payment: {
+    type: String,
+    default: "no",
+  },
   completed: {
     type: String,
     default: "no",

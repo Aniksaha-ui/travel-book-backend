@@ -41,7 +41,10 @@ const verifyAdmin = async (req, res, next) => {
 
 router.post("/", async (req, res) => {
   console.log(req.body);
+  req.body.payment = "no";
+  console.log(req.body, "body");
   const book = new Booking(req.body);
+
   const bookingList = await book.save();
   if (bookingList) {
     res.send(bookingList);
@@ -59,12 +62,52 @@ router.get("/bookingDetails/:id", async (req, res) => {
   res.send({ data: bookingDetails });
 });
 
+//for my booking where payement is not done
 router.get("/:email", verifyJWT, async (req, res) => {
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
   console.log(email);
   if (email === decodedEmail) {
-    const bookingList = await Booking.find({ email: email, completed: "no" });
+    const bookingList = await Booking.find({ email: email, payment: "no" });
+    if (bookingList) {
+      console.log(bookingList);
+      res.send({ data: bookingList });
+    } else {
+      res.send({ message: "No data found" });
+    }
+  } else {
+    res.status(403).send({ message: "forbidden access" });
+  }
+});
+
+//yes payment tours
+router.get("/pending/:email", verifyJWT, async (req, res) => {
+  const decodedEmail = req.decoded?.email;
+  const email = req.params.email;
+  console.log(email);
+  if (email === decodedEmail) {
+    const bookingList = await Booking.find({ email: email, payment: "yes" });
+    if (bookingList) {
+      console.log(bookingList);
+      res.send({ data: bookingList });
+    } else {
+      res.send({ message: "No data found" });
+    }
+  } else {
+    res.status(403).send({ message: "forbidden access" });
+  }
+});
+
+//pending payment tours where payment status is pending
+router.get("/pending/:email", verifyJWT, async (req, res) => {
+  const decodedEmail = req.decoded?.email;
+  const email = req.params.email;
+  console.log(email);
+  if (email === decodedEmail) {
+    const bookingList = await Booking.find({
+      email: email,
+      payment: "pending",
+    });
     if (bookingList) {
       console.log(bookingList);
       res.send({ data: bookingList });
