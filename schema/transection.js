@@ -43,6 +43,10 @@ const tourSchema = mongoose.Schema({
   processingFee: {
     type: Number,
   },
+  paymentDate: {
+    type: Date,
+    default: Date.now(),
+  },
   status: {
     type: String,
     default: "pending",

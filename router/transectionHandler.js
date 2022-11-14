@@ -81,32 +81,32 @@ router.get("/:email", verifyJWT, async (req, res) => {
 });
 
 //invoice
-router.get("/invoice/:email", async (req, res) => {
-  try {
-    const email = req.params.email;
-    const transection = await Transection.find({ email: email });
-    const booking = await Booking.find({ email: email, completed: "no" });
-    const subTotal = await Booking.aggregate([
-      {
-        $match: { email: email, completed: "no" },
-      },
-      {
-        $group: {
-          _id: "$tourName",
-          price: { $sum: "$price" },
-          numberOfPerson: { $sum: "$numberOfPerson" },
-        },
-      },
-    ]);
+// router.get("/invoice/:email", async (req, res) => {
+//   try {
+//     const email = req.params.email;
+//     const transection = await Transection.find({ email: email });
+//     const booking = await Booking.find({ email: email, completed: "no" });
+//     const subTotal = await Booking.aggregate([
+//       {
+//         $match: { email: email, completed: "no" },
+//       },
+//       {
+//         $group: {
+//           _id: "$tourName",
+//           price: { $sum: "$price" },
+//           numberOfPerson: { $sum: "$numberOfPerson" },
+//         },
+//       },
+//     ]);
 
-    // console.log(tourName);
-    res.send({
-      status: 200,
-      booking: booking,
-      transection: transection,
-      subTotal: subTotal,
-    });
-  } catch (err) {}
-});
+//     // console.log(tourName);
+//     res.send({
+//       status: 200,
+//       booking: booking,
+//       transection: transection,
+//       subTotal: subTotal,
+//     });
+//   } catch (err) {}
+// });
 
 module.exports = router;

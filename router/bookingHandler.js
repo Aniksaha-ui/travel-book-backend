@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const Booking = require("../model/booking");
+const Tour = require("../model/tour");
 require("dotenv").config();
 
 //verify jwt
@@ -57,7 +58,7 @@ router.post("/", async (req, res) => {
 router.get("/bookingDetails/:id", async (req, res) => {
   const id = req.params.id;
   console.log(id);
-  const bookingDetails = await Booking.find({ _id: id });
+  const bookingDetails = await Booking.find({ _id: id, payment: "no" });
   console.log(bookingDetails);
   res.send({ data: bookingDetails });
 });
@@ -111,6 +112,25 @@ router.get("/:email", verifyJWT, async (req, res) => {
     if (bookingList) {
       console.log(bookingList);
       res.send({ data: bookingList });
+    } else {
+      res.send({ message: "No data found" });
+    }
+  } else {
+    res.status(403).send({ message: "forbidden access" });
+  }
+});
+
+//invoice of upcomeing tour
+router.get("/invoice/:email/:tourId", verifyJWT, async (req, res) => {
+  const decodedEmail = req.decoded?.email;
+  const email = req.params.email;
+  const tourId = req.params.tourId;
+  if (email === decodedEmail) {
+    const bookingList = await Booking.find({ email: email, tourId: tourId });
+    const tourInfo = await Tour.find({ _id: tourId });
+    if (bookingList) {
+      console.log(bookingList);
+      res.send({ bookingList: bookingList, tour: tourInfo });
     } else {
       res.send({ message: "No data found" });
     }
