@@ -5,38 +5,39 @@ const jwt = require("jsonwebtoken");
 
 const Booking = require("../model/booking");
 const Tour = require("../model/tour");
+const Transection = require("../model/transection");
 require("dotenv").config();
-
+const { verifyJWT, verifyAdmin } = require("../auth/auth");
 //verify jwt
-function verifyJWT(req, res, next) {
-  const authHeader = req.headers.authorization;
-  console.log(authHeader);
-  if (!authHeader) {
-    return res.status(401).send({ message: "UnAuthorized access" });
-  }
-  const token = authHeader.split(" ")[1];
-  console.log(token, "token");
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
-    if (err) {
-      console.log(err);
-      return res.status(403).send({ message: "Forbidden access" });
-    }
-    req.decoded = decoded;
-    console.log(req.decoded);
-    next();
-  });
-}
+// function verifyJWT(req, res, next) {
+//   const authHeader = req.headers.authorization;
+//   console.log(authHeader);
+//   if (!authHeader) {
+//     return res.status(401).send({ message: "UnAuthorized access" });
+//   }
+//   const token = authHeader.split(" ")[1];
+//   console.log(token, "token");
+//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+//     if (err) {
+//       console.log(err);
+//       return res.status(403).send({ message: "Forbidden access" });
+//     }
+//     req.decoded = decoded;
+//     console.log(req.decoded);
+//     next();
+//   });
+// }
 
-const verifyAdmin = async (req, res, next) => {
-  const requester = req.decoded.email;
-  console.log(requester, "decoded");
-  const requesterAccount = await User.findOne({ email: requester });
-  if (requesterAccount.role === "admin") {
-    next();
-  } else {
-    res.send({ message: "admin forbidden", status: 403 });
-  }
-};
+// const verifyAdmin = async (req, res, next) => {
+//   const requester = req.decoded.email;
+//   console.log(requester, "decoded");
+//   const requesterAccount = await User.findOne({ email: requester });
+//   if (requesterAccount.role === "admin") {
+//     next();
+//   } else {
+//     res.send({ message: "admin forbidden", status: 403 });
+//   }
+// };
 
 // book a tour
 
@@ -128,9 +129,17 @@ router.get("/invoice/:email/:tourId", verifyJWT, async (req, res) => {
   if (email === decodedEmail) {
     const bookingList = await Booking.find({ email: email, tourId: tourId });
     const tourInfo = await Tour.find({ _id: tourId });
+    const transectionInfo = await Transection.find({
+      tourId: tourId,
+      status: "yes",
+    });
     if (bookingList) {
       console.log(bookingList);
-      res.send({ bookingList: bookingList, tour: tourInfo });
+      res.send({
+        bookingList: bookingList,
+        tour: tourInfo,
+        transection: transectionInfo,
+      });
     } else {
       res.send({ message: "No data found" });
     }
