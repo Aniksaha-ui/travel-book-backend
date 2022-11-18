@@ -17,16 +17,4 @@ function verifyJWT(req, res, next) {
   });
 }
 
-const verifyAdmin = async (req, res, next) => {
-  const requester = req.decoded.email;
-  console.log(requester, "decoded");
-  const requesterAccount = await User.findOne({ email: requester });
-  if (requesterAccount.role === "admin") {
-    next();
-  } else {
-    res.send({ message: "admin forbidden", status: 403 });
-  }
-};
-
-module.exports.verifyAdmin = verifyAdmin;
 module.exports.verifyJWT = verifyJWT;

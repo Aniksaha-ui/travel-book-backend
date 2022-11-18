@@ -3,7 +3,6 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
-// const verifyJWT = require("../auth/verifyJWT");
 const Tour = require("../model/tour");
 const User = require("../model/user");
 require("dotenv").config();
