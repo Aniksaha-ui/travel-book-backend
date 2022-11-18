@@ -8,7 +8,6 @@ const Tour = require("../model/tour");
 const User = require("../model/user");
 const Booking = require("../model/booking");
 const Transection = require("../model/transection");
-// const { verifyJWT, verifyAdmin } = require("../auth/auth");
 require("dotenv").config();
 
 //verify jwt
@@ -46,7 +45,7 @@ const verifyAdmin = async (req, res, next) => {
 router.get("/", verifyJWT, verifyAdmin, async (req, res) => {
   try {
     const query = {};
-    const transection = await Transection.find({});
+    const transection = await Transection.find({ status: "pending" });
     if (transection.length > 0) {
       res.send({ status: 200, data: transection });
     }

@@ -7,7 +7,6 @@ const Booking = require("../model/booking");
 const Tour = require("../model/tour");
 const Transection = require("../model/transection");
 require("dotenv").config();
-// const { verifyJWT } = require("../auth/auth");
 // verify jwt
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
