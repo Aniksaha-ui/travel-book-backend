@@ -4,6 +4,10 @@ const tourSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  bookingId: {
+    type: String,
+    required: true,
+  },
   tourName: {
     type: String,
     required: true,

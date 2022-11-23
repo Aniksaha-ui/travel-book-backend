@@ -24,6 +24,10 @@ mongoose
   )
   .then(() => console.log("connected successfully"))
   .catch((err) => console.log(err));
+// mongoose
+//   .connect("mongodb://localhost:27017/travel-agency", {})
+//   .then(() => console.log("connected successfully"))
+//   .catch((err) => console.log(err));
 
 //database connection end
 

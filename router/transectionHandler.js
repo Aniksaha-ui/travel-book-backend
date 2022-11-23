@@ -64,8 +64,68 @@ router.post("/", verifyJWT, async (req, res) => {
   }
 });
 
+//find a tnx info for update status
+router.get("/admin/:id", verifyJWT, verifyAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const transection = await Transection.find({ _id: id });
+    console.log(transection);
+    res.send({ data: transection, status: 200 });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.patch("/tour/:id/:tourId", async (req, res) => {
+  // need booking id in transection collection
+
+  console.log("hitted");
+  const { status } = req.body;
+  const { id, tourId } = req.params;
+  let updateStatus = false;
+  // console.log(status);
+  try {
+    // const booking = await Booking.find({ _id: bookingId });
+    // const { numberOfPerson } = booking[0];
+    // console.log(id, "transection id");
+    // console.log(tourId, "tourid");
+    // console.log(numberOfPerson, "nop");
+    const updateTransection = await Transection.updateOne(
+      { _id: id },
+      { status: status }
+    ); //ache
+
+    const findBookId = await Transection.find({ _id: id });
+    const bookingId = findBookId[0].bookingId;
+    // console.log(bookingId, "bookingId");
+    const findNoPerson = await Booking.find({ _id: bookingId });
+    let numberOfPerson = findNoPerson[0].numberOfPerson;
+    // console.log(numberOfPerson, "person");
+    const updateBookingPaymentStatus = await Booking.updateOne(
+      { _id: bookingId },
+      { payment: status }
+    ); //new
+    const updateTourSeat = await Tour.updateOne(
+      { _id: tourId },
+      { $inc: { availableSeat: -numberOfPerson } }
+    );
+    // console.log(updateTourSeat);
+    if (
+      updateTransection.acknowledged == true &&
+      updateBookingPaymentStatus.acknowledged == true &&
+      updateTourSeat.acknowledged == true
+    ) {
+      updateStatus = true;
+    }
+    res.send({ updateStatus, data: "Update Successfully", status: 200 });
+  } catch (err) {
+    res.send({ err, status: 500 });
+  }
+});
+
 //find transection of a user
 router.get("/:email", verifyJWT, async (req, res) => {
+  console.log("hitted");
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
   if (email === decodedEmail) {
