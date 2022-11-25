@@ -109,7 +109,7 @@ router.patch("/tour/:id/:tourId", async (req, res) => {
       { _id: tourId },
       { $inc: { availableSeat: -numberOfPerson } }
     );
-    // console.log(updateTourSeat);
+    console.log(updateTourSeat);
     if (
       updateTransection.acknowledged == true &&
       updateBookingPaymentStatus.acknowledged == true &&
