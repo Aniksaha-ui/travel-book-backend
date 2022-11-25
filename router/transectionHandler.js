@@ -45,6 +45,7 @@ const verifyAdmin = async (req, res, next) => {
 router.get("/", verifyJWT, verifyAdmin, async (req, res) => {
   try {
     const query = {};
+    console.log(req.body);
     const transection = await Transection.find({ status: "pending" });
     if (transection.length > 0) {
       res.send({ status: 200, data: transection });
@@ -52,12 +53,16 @@ router.get("/", verifyJWT, verifyAdmin, async (req, res) => {
   } catch (err) {}
 });
 
-//create admin route
+//insert trnx from user
 router.post("/", verifyJWT, async (req, res) => {
   try {
-    console.log("hitted");
+    console.log(req.body, "trnx");
     const authHeader = req.headers.authorization;
     const transection = await Transection.create(req.body);
+    const updateTransection = await Booking.updateOne(
+      { _id: req.body.bookingId },
+      { payment: "pending" }
+    );
     res.send({ data: transection, status: 200 });
   } catch (err) {
     console.log(err);
@@ -76,9 +81,8 @@ router.get("/admin/:id", verifyJWT, verifyAdmin, async (req, res) => {
   }
 });
 
+//update after approved or reject trnx
 router.patch("/tour/:id/:tourId", async (req, res) => {
-  // need booking id in transection collection
-
   console.log("hitted");
   const { status } = req.body;
   const { id, tourId } = req.params;
