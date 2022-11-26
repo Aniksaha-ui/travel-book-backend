@@ -10,7 +10,9 @@ const userHandler = require("./router/userHandler");
 const bookingHandler = require("./router/bookingHandler");
 const blogHandler = require("./router/blogHandler");
 const transectionHandler = require("./router/transectionHandler");
+const followersHandler = require("./router/followersHandler");
 const User = require("./model/user");
+
 // const subscribeHandler = require("./router/subscribeHandler");
 
 app.use(cors());
@@ -42,6 +44,7 @@ app.use("/booking", bookingHandler);
 app.use("/user", userHandler);
 app.use("/blog", blogHandler);
 app.use("/transection", transectionHandler);
+app.use("/followers", followersHandler);
 
 app.get("/admin/:email", async (req, res) => {
   console.log("hitted in admin route");
@@ -52,6 +55,5 @@ app.get("/admin/:email", async (req, res) => {
   res.send({ admin: isAdmin });
 });
 app.listen(port, (a) => {
-  // console.log(a);
   console.log(`app listening at port ${port}`);
 });

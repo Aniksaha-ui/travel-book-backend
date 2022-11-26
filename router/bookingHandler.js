@@ -10,26 +10,26 @@ require("dotenv").config();
 // verify jwt
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
-  console.log(authHeader);
+  // console.log(authHeader);
   if (!authHeader) {
     return res.status(401).send({ message: "UnAuthorized access" });
   }
   const token = authHeader.split(" ")[1];
-  console.log(token, "token");
+  // console.log(token, "token");
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
     if (err) {
-      console.log(err);
+      // console.log(err);
       return res.status(403).send({ message: "Forbidden access" });
     }
     req.decoded = decoded;
-    console.log(req.decoded);
+    // console.log(req.decoded);
     next();
   });
 }
 
 const verifyAdmin = async (req, res, next) => {
   const requester = req.decoded.email;
-  console.log(requester, "decoded");
+  // console.log(requester, "decoded");
   const requesterAccount = await User.findOne({ email: requester });
   if (requesterAccount.role === "admin") {
     next();
@@ -41,10 +41,10 @@ const verifyAdmin = async (req, res, next) => {
 // book a tour
 
 router.post("/", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   req.body.payment = "no";
-  console.log(req.body, "body");
-  const book = new Booking(req.body);
+  // console.log(req.body, "body");
+  // const book = new Booking(req.body);
 
   const bookingList = await book.save();
   if (bookingList) {
@@ -58,15 +58,15 @@ router.post("/", async (req, res) => {
 //pending payment tours where payment status is no
 router.get("/bookingDetails/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(id);
+  // console.log(id);
   const bookingDetails = await Booking.find({ _id: id, payment: "no" });
-  console.log(bookingDetails);
+  // console.log(bookingDetails);
   res.send({ data: bookingDetails });
 });
 
 //pending payment tours where payment status is pending
 router.get("/pending-booking/:email", verifyJWT, async (req, res) => {
-  console.log("hitted");
+  // console.log("hitted");
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
   if (email === decodedEmail) {
@@ -75,7 +75,7 @@ router.get("/pending-booking/:email", verifyJWT, async (req, res) => {
       payment: "pending",
     });
     if (bookingList) {
-      console.log(bookingList, "booking list");
+      // console.log(bookingList, "booking list");
       res.send({ data: bookingList });
     } else {
       res.send({ message: "No data found" });
@@ -89,11 +89,11 @@ router.get("/pending-booking/:email", verifyJWT, async (req, res) => {
 router.get("/upcomeing-booking/:email", verifyJWT, async (req, res) => {
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
-  console.log(email);
+  // console.log(email);
   if (email === decodedEmail) {
     const bookingList = await Booking.find({ email: email, payment: "yes" });
     if (bookingList) {
-      console.log(bookingList);
+      // console.log(bookingList);
       res.send({ data: bookingList });
     } else {
       res.send({ message: "No data found" });
@@ -107,11 +107,11 @@ router.get("/upcomeing-booking/:email", verifyJWT, async (req, res) => {
 router.get("/:email", verifyJWT, async (req, res) => {
   const decodedEmail = req.decoded?.email;
   const email = req.params.email;
-  console.log(email);
+  // console.log(email);
   if (email === decodedEmail) {
     const bookingList = await Booking.find({ email: email, payment: "no" });
     if (bookingList) {
-      console.log(bookingList);
+      // console.log(bookingList);
       res.send({ data: bookingList });
     } else {
       res.send({ message: "No data found" });
@@ -134,7 +134,7 @@ router.get("/invoice/:email/:tourId", verifyJWT, async (req, res) => {
       status: "yes",
     });
     if (bookingList) {
-      console.log(bookingList);
+      // console.log(bookingList);
       res.send({
         bookingList: bookingList,
         tour: tourInfo,

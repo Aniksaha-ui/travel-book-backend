@@ -18,11 +18,23 @@ router.get("/", async (req, res) => {
 //post blogs
 
 router.post("/", async (req, res) => {
+  console.log(req.body, "hitted");
   try {
     const blog = await Blog.create(req.body);
     res.send({ message: "data inserted" });
   } catch (err) {
     res.json(400).send({ message: "data not inserted" });
+  }
+});
+
+//blog details
+router.get("/:id", async (req, res) => {
+  try {
+    const blogId = req.params;
+    const blog = await Blog.find({ _id: blogId });
+    res.send({ blog });
+  } catch (err) {
+    res.send({ message: "data not found" });
   }
 });
 

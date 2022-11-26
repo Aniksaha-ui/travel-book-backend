@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 
 router.put("/:email", async (req, res) => {
-  console.log("hitted");
+  // console.log("hitted");
   const email = req.params.email;
 
   const user = req.body;
