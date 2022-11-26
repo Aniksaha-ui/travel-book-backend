@@ -41,17 +41,21 @@ const verifyAdmin = async (req, res, next) => {
 // book a tour
 
 router.post("/", async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
   req.body.payment = "no";
-  // console.log(req.body, "body");
-  // const book = new Booking(req.body);
-
-  const bookingList = await book.save();
-  if (bookingList) {
-    res.send(bookingList);
-  } else {
-    res.send({ message: "Data can not be inserted" });
+  console.log(req.body, "body");
+  const book = new Booking(req.body);
+  try {
+    const bookingList = await book.save();
+    if (bookingList) {
+      res.send(bookingList);
+    } else {
+      res.send({ message: "Data can not be inserted" });
+    }
+  } catch (err) {
+    console.log(err);
   }
+
   //   console.log(req.body);
 });
 
@@ -130,6 +134,7 @@ router.get("/invoice/:email/:tourId", verifyJWT, async (req, res) => {
     const bookingList = await Booking.find({ email: email, tourId: tourId });
     const tourInfo = await Tour.find({ _id: tourId });
     const transectionInfo = await Transection.find({
+      email: email,
       tourId: tourId,
       status: "yes",
     });
