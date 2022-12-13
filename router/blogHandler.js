@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
 const Blog = require("../model/blog");
 require("dotenv").config();
 
@@ -30,7 +29,7 @@ router.post("/", async (req, res) => {
 //blog details
 router.get("/:id", async (req, res) => {
   try {
-    const blogId = req.params;
+    const blogId = req.params.id;
     const blog = await Blog.find({ _id: blogId });
     res.send({ blog });
   } catch (err) {
