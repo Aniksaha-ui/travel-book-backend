@@ -38,13 +38,15 @@ const verifyAdmin = async (req, res, next) => {
   }
 };
 
+//find all tours
 router.get("/all", async (req, res) => {
   try {
     const tour = await Tour.find({});
     if (tour.length > 0) {
       res.send(tour);
+    } else {
+      res.send({ message: "No data found" });
     }
-    res.send({ message: "data not found" });
   } catch (err) {
     console.log(err);
   }

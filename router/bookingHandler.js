@@ -153,4 +153,16 @@ router.get("/invoice/:email/:tourId", verifyJWT, async (req, res) => {
   }
 });
 
+// booking details of a tour using tourId
+router.get("/users/:tourId", async (req, res) => {
+  try {
+    const query = {};
+    // console.log(req.body);
+    const booking = await Booking.find({ payment: "yes" });
+    if (booking.length > 0) {
+      res.send({ status: 200, data: booking });
+    }
+  } catch (err) {}
+});
+
 module.exports = router;
