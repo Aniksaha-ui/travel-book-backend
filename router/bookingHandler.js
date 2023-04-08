@@ -156,9 +156,11 @@ router.get("/invoice/:email/:tourId", verifyJWT, async (req, res) => {
 // booking details of a tour using tourId
 router.get("/users/:tourId", async (req, res) => {
   try {
+    const tourId = req.params.tourId;
+    console.log(tourId);
     const query = {};
     // console.log(req.body);
-    const booking = await Booking.find({ payment: "yes" });
+    const booking = await Booking.find({ payment: "yes",tourId : tourId });
     if (booking.length > 0) {
       res.send({ status: 200, data: booking });
     }
