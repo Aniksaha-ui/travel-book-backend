@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 //post blogs
 
 router.post("/", async (req, res) => {
-  console.log(req.body, "hitted");
+  // console.log(req.body, "hitted");
   try {
     const blog = await Blog.create(req.body);
     res.send({ message: "data inserted" });

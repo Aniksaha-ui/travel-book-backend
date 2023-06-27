@@ -11,7 +11,9 @@ const bookingHandler = require("./router/bookingHandler");
 const blogHandler = require("./router/blogHandler");
 const transectionHandler = require("./router/transectionHandler");
 const followersHandler = require("./router/followersHandler");
+const hotelHandler = require("./router/hotelHandler");
 const User = require("./model/user");
+const hotelSchema = require("./schema/hotel");
 
 // const subscribeHandler = require("./router/subscribeHandler");
 
@@ -45,6 +47,8 @@ app.use("/user", userHandler);
 app.use("/blog", blogHandler);
 app.use("/transection", transectionHandler);
 app.use("/followers", followersHandler);
+app.use("/hotels", hotelHandler);
+app.use("/hotels", hotelHandler);
 
 app.get("/admin/:email", async (req, res) => {
   console.log("hitted in admin route");

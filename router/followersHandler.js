@@ -8,7 +8,7 @@ require("dotenv").config();
 
 router.post("/", async (req, res) => {
   try {
-    console.log("hitted on followers");
+    // console.log("hitted on followers");
     const followers = await Followers.create(req.body);
     console.log(followers);
     res.send({ message: "follower added successfully" });
