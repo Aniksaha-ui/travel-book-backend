@@ -9,18 +9,19 @@ require("dotenv").config();
 router.get("/", async (req, res) => {
   const hotel = await Hotel.find({});
   if (hotel.length > 0) {
-    res.send(hotel);
+    res.send({data: hotel});
   } else {
     res.send({ message: "No hotel found" });
   }
 });
 
 //add a new hotel
-router.post("/", async (req, res) => {
+router.post("/add", async (req, res) => {
   try {
-    console.log(req.body, "assa");
     const hotel = await Hotel.create(req.body);
-    res.send(hotel);
+    if(hotel){
+      res.send({message:"New hotel added",code:200,data:hotel});
+    }
   } catch (err) {
     console.log(err, "error");
   }
