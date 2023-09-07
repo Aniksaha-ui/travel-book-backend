@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 
 const HotelRooms = require("../model/hotelRoom");
 const Hotel = require("../model/hotel");
+const Tour = require("../model/tour");
+
 require("dotenv").config();
 
 //get all hotel
@@ -55,6 +57,17 @@ router.post("/getUniqueRoomNumbers", async (req, res) => {
   res.send({ data: hotelSeats });
 });
 
+
+router.post("/getUniqueSeatNumberByHotelId", async (req, res) => {
+  const name = req.body.hotelName;
+  const tourId = req.body.tourId;
+  const roomId = req.body.roomId;
+  const hotelSeats = await HotelRooms.find({ name: name,tour_id: tourId,roomId: roomId }).distinct('seat_no')
+  const tourInfo = await Tour.find({_id: tourId}).select({'_id': 1,'name': 1})
+  const count = hotelSeats.length;
+  const response = {hotelSeats,count} 
+  res.send({ hotelSeats: hotelSeats, tourInfo:tourInfo, count,roomId, hotel : name });
+});
 
 
 
