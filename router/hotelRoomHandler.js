@@ -61,7 +61,7 @@ router.post("/getUniqueRoomNumbers", async (req, res) => {
 
 router.post("/getBookingListByTourId", async (req, res) => {
   const tourId = req.body.tourId;
-  const bookingIdList = await Booking.find({ tour_id: tourId }).distinct('_id')
+  const bookingIdList = await Booking.find({ tourId: tourId }).distinct('_id')
   const response = {bookingIdList: bookingIdList} 
   res.send({ bookingList: bookingIdList });
 });
@@ -72,7 +72,7 @@ router.post("/getUniqueSeatNumberByHotelId", async (req, res) => {
   const tourId = req.body.tourId;
   const roomId = req.body.roomId;
   const bookingId = req.body.bookingId;
-  // using bookingId we find the persi=on 
+  // using bookingId we find the persons 
   const personList =[{name:"AXY"},{name:"XYZ"},{name:"partho"}];
   const hotelSeats = await HotelRooms.find({ name: name,tour_id: tourId,roomId: roomId }).distinct('seat_no')
   const tourInfo = await Tour.find({_id: tourId}).select({'_id': 1,'name': 1})

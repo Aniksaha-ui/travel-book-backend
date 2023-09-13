@@ -13,6 +13,7 @@ const transectionHandler = require("./router/transectionHandler");
 const followersHandler = require("./router/followersHandler");
 const hotelHandler = require("./router/hotelHandler");
 const hotelRoomHandler = require("./router/hotelRoomHandler");
+const hotelRoomBookingHandler = require("./router/hotelRoomBookingHandler");
 const User = require("./model/user");
 
 // const subscribeHandler = require("./router/subscribeHandler");
@@ -49,6 +50,7 @@ app.use("/transection", transectionHandler);
 app.use("/followers", followersHandler);
 app.use("/hotels", hotelHandler);
 app.use("/hotel-rooms", hotelRoomHandler);
+app.use("/hotel-rooms-booking", hotelRoomBookingHandler);
 // app.use("/hotels", hotelHandler);
 
 app.get("/admin/:email", async (req, res) => {
