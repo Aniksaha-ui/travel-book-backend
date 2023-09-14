@@ -13,7 +13,7 @@ const hotelRoomBookingSchema = mongoose.Schema({
     type:String
   },
   persons:[
-    {name:String,seatNo:String}
+    {name:String,seat_no:String}
   ]
 });
 

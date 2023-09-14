@@ -8,7 +8,7 @@ const Tour = require("../model/tour");
 const Booking = require('../model/booking');
 require("dotenv").config();
 
-//get all hotel
+/** get all hotel */
 router.get("/", async (req, res) => {
   const rooms = await HotelRooms.find({});
   if (rooms.length > 0) {
@@ -18,19 +18,33 @@ router.get("/", async (req, res) => {
   }
 });
 
-//add a new hotel
+ /**Hotel room setup adding */
 router.post("/add", async (req, res) => {
-  try {
-    const hotel = await HotelRooms.create(req.body);
-    if(hotel){
-      res.send({message:"New hotel rooms added",status:200,data:hotel});
+    try {
+      console.log(req.body.capacity,"capacity");
+      let capacity  = parseInt(req.body.capacity)
+      for(let i=0;i<capacity;i++){
+          const obj = {
+            hotel_id: req.body.hotel_id,
+            name: req.body.name,
+            address: req.body.address,
+            capacity : capacity || 0,
+            roomId : req.body.roomId,
+            seat_no: i+1,
+            tour_id: ''
+          }
+          const hotel = await HotelRooms.create(obj);
+      }
+
+        res.send({message:"New hotel rooms added",status:200});
+    
+      } catch (err) {
+      console.log(err, "error");
     }
-  } catch (err) {
-    console.log(err, "error");
-  }
-});
+  });
+  
 
-
+/** get hotel by tour id */
 router.get("/getById/:id", async (req, res) => {
     const id = req.params.id;
     const hotelSeats = await HotelRooms.find({ tour_id: id }).select({'name':1,'seat_no':1})
@@ -38,6 +52,7 @@ router.get("/getById/:id", async (req, res) => {
  });
 
 
+/**get unique hotel by tour id */
 router.get("/getUniqueHotels/:id", async (req, res) => {
   const response = {};
   const id = req.params.id;
@@ -48,7 +63,7 @@ router.get("/getUniqueHotels/:id", async (req, res) => {
 });
 
 
-
+/** get unique room numbers by hotelname and tourId */
 router.post("/getUniqueRoomNumbers", async (req, res) => {
   const name = req.body.hotelName;
   const tourId = req.body.tourId;
@@ -58,7 +73,7 @@ router.post("/getUniqueRoomNumbers", async (req, res) => {
 });
 
 
-
+/** get booking list of a tour by tourId */
 router.post("/getBookingListByTourId", async (req, res) => {
   const tourId = req.body.tourId;
   const bookingIdList = await Booking.find({ tourId: tourId }).distinct('_id')
@@ -66,7 +81,8 @@ router.post("/getBookingListByTourId", async (req, res) => {
   res.send({ bookingList: bookingIdList });
 });
 
-//
+
+/** get unique seat number by name,tourId and roomId and bookingId*/
 router.post("/getUniqueSeatNumberByHotelId", async (req, res) => {
   const name = req.body.hotelName;
   const tourId = req.body.tourId;
@@ -82,9 +98,7 @@ router.post("/getUniqueSeatNumberByHotelId", async (req, res) => {
 });
 
 
-
-
-
+/** get hotel information by hotelName */
 router.get("/getHotelInformationByName/:hotelName", async (req, res) => {
   const name = req.params.hotelName;
   //I need {name: 'hotel' , room:101, capacity: 3}

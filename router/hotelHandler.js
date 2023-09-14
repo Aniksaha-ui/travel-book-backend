@@ -27,4 +27,16 @@ router.post("/add", async (req, res) => {
   }
 });
 
+
+//get hotel by id
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  const hotel = await Hotel.find({_id:id});
+  if (hotel.length > 0) {
+    res.send({data: hotel});
+  } else {
+    res.send({ message: "No hotel found" });
+  }
+});
+
 module.exports = router;
