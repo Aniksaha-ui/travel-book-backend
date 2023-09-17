@@ -107,5 +107,21 @@ router.get("/getHotelInformationByName/:hotelName", async (req, res) => {
 });
 
 
+/** hotel tour update */
+router.post("/assignHotelForTour",async (req, res) =>{
+  console.log(req,"req");
+  const filter = { hotel_id: req.hotelId };
+  const update = { tour_id: req.tourId };
+  console.log(req.hotelId, req.tour_id,"hotel & tour");
+  let doc = await HotelRooms.updateMany({hotel_id: req.body.hotelId}, { $set: { tour_id: req.body.tourId } },{multi:true});
+  if(doc.acknowledged===true){
+    res.send({message: `Booking Hotel Successfull for the tour ${req.hotelId}`});
+  }else{
+    res.send({code: 400, message: "Bad Request"});
+  }
+
+})
+
+
 
 module.exports = router;

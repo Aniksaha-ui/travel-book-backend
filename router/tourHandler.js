@@ -7,7 +7,7 @@ const Tour = require("../model/tour");
 const User = require("../model/user");
 require("dotenv").config();
 
-//verify jwt
+/**verify jwt */
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   // console.log(authHeader);
@@ -26,7 +26,7 @@ function verifyJWT(req, res, next) {
     next();
   });
 }
-
+/**verify admin */
 const verifyAdmin = async (req, res, next) => {
   const requester = req.decoded.email;
   // console.log(requester, "decoded");
@@ -38,7 +38,7 @@ const verifyAdmin = async (req, res, next) => {
   }
 };
 
-//find all tours
+/** find all tours */
 router.get("/all", async (req, res) => {
   try {
     const tour = await Tour.find({});
@@ -52,7 +52,21 @@ router.get("/all", async (req, res) => {
   }
 });
 
-//upcomeing tour
+/** find dropdown list of tours */
+router.get("/dropdown-list", async (req, res) => {
+  try {
+    const tour = await Tour.find({}).select({_id: 1, name:1});
+    if (tour.length > 0) {
+      res.send({data: tour});
+    } else {
+      res.send({ message: "No data found" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+/** upcomeing tour */
 router.get("/upcomeing", async (req, res) => {
   // console.log(Tour);
   const tour = await Tour.find({ status: "upcomeing" });
@@ -63,7 +77,7 @@ router.get("/upcomeing", async (req, res) => {
   }
 });
 
-//popular tour
+/** popular tour */
 router.get("/popular", async (req, res) => {
   const tour = await Tour.find({ status: "popular" });
   if (tour.length > 0) {
@@ -73,7 +87,7 @@ router.get("/popular", async (req, res) => {
   }
 });
 
-//tour description
+/** tour description */
 
 router.get("/description/:id", async (req, res) => {
   const id = req.params.id;
@@ -83,6 +97,8 @@ router.get("/description/:id", async (req, res) => {
   res.send(tourDescription);
 });
 
+
+/**add tour */
 router.post("/add-tour", verifyJWT, verifyAdmin, async (req, res) => {
   try {
     // console.log("hitted");
@@ -98,18 +114,6 @@ router.post("/add-tour", verifyJWT, verifyAdmin, async (req, res) => {
   }
 });
 
-// router.route("/add-tour").post(verifyJWT, async () => {
-//   try {
-//     console.log("hitted");
-//     req.body.include = [req.body.include];
-//     req.body.notInclude = [req.body.notInclude];
-//     console.log(req.body);
 
-//     const data = await Tour.create(req.body);
-//     res.send(data);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
 
 module.exports = router;
