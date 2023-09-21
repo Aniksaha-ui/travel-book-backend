@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const Booking = require("../model/booking");
 const Tour = require("../model/tour");
 const Transection = require("../model/transection");
+const sendMail = require("../utils/nodemailer");
+const { TourRegistationBody} = require("../utils/emailMessage")
+const { TourRegistationSubject} = require("../utils/emailSubject")
 require("dotenv").config();
 // verify jwt
 function verifyJWT(req, res, next) {
@@ -48,7 +51,16 @@ router.post("/", async (req, res) => {
   try {
     const bookingList = await book.save();
     if (bookingList) {
+      /** Sending Email */
+      const sendEmail = await sendMail(TourRegistationSubject,TourRegistationBody,req.body.email);
+      if(!sendEmail){
+        res.send({message: "Email Sent successfully"})
+      }else{
+        res.send({message: "Email Sent Not Successfully"})
+      }
+      /** Sending Email End*/
       res.send(bookingList);
+      
     } else {
       res.send({ message: "Data can not be inserted" });
     }
