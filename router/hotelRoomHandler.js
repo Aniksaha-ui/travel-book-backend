@@ -130,9 +130,9 @@ router.post("/assignHotelForTour",async (req, res) =>{
 })
 
 
-/**email send */
+/**email send for not fillup form*/
 router.get("/mail-send",async(req,res)=>{
-    const sendEmail = await sendMail(NotFillApplicationSubject,NotFillApplicationBody);
+    const sendEmail = await sendMail(NotFillApplicationSubject,NotFillApplicationBody,"sahaanik1048@gmail.com");
     if(!sendEmail){
       res.send({message: "Email Sent successfully"})
     }else{

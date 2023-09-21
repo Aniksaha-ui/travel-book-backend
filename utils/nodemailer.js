@@ -1,19 +1,19 @@
 const nodemailer = require("nodemailer");
 
 
- function sendMail(subject,message){
+ function sendMail(subject,message,sendEmail){
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "sahaanik1045@gmail.com",
-          pass: "hjdk ajbo mlrp jrxy"
+          user: process.env.APP_EMAIL_SECRET,
+          pass: process.env.APP_EMAIL_PASSWORD
         },
       });
       
       // Define the email message
       const mailOptions = {
         from:process.env.APP_EMAIL_SECRET,
-        to: "sahaanik1048@gmail.com",
+        to: sendEmail,
         subject: subject,
         text: message,
       };
@@ -29,6 +29,6 @@ const nodemailer = require("nodemailer");
         }
       });
 
-}
+ }
  
 module.exports = sendMail;
