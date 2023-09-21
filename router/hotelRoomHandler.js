@@ -6,6 +6,8 @@ const HotelRooms = require("../model/hotelRoom");
 const Hotel = require("../model/hotel");
 const Tour = require("../model/tour");
 const Booking = require('../model/booking');
+const BookingPerson = require("../model/bookingPerson");
+
 require("dotenv").config();
 
 /** get all hotel */
@@ -89,7 +91,9 @@ router.post("/getUniqueSeatNumberByHotelId", async (req, res) => {
   const roomId = req.body.roomId;
   const bookingId = req.body.bookingId;
   // using bookingId we find the persons 
-  const personList =[{name:"AXY"},{name:"XYZ"},{name:"partho"}];
+  const personListInfo = await BookingPerson.find({booking_id: bookingId}).select({persons:1})
+  console.log(personListInfo[0].persons,"person")
+  const personList =personListInfo[0].persons;
   const hotelSeats = await HotelRooms.find({ name: name,tour_id: tourId,roomId: roomId }).distinct('seat_no')
   const tourInfo = await Tour.find({_id: tourId}).select({'_id': 1,'name': 1})
   const count = hotelSeats.length;

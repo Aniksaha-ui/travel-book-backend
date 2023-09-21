@@ -8,6 +8,7 @@ const bannerHandler = require("./router/bannerHandler");
 const tourHandler = require("./router/tourHandler");
 const userHandler = require("./router/userHandler");
 const bookingHandler = require("./router/bookingHandler");
+const bookingPersonHandler = require("./router/bookingPersonHandler");
 const blogHandler = require("./router/blogHandler");
 const transectionHandler = require("./router/transectionHandler");
 const followersHandler = require("./router/followersHandler");
@@ -44,6 +45,7 @@ app.get("/", (req, res) => {
 app.use("/banner", bannerHandler);
 app.use("/tour", tourHandler);
 app.use("/booking", bookingHandler);
+app.use("/booking-persons",bookingPersonHandler);
 app.use("/user", userHandler);
 app.use("/blog", blogHandler);
 app.use("/transection", transectionHandler);
