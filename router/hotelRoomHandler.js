@@ -7,6 +7,12 @@ const Hotel = require("../model/hotel");
 const Tour = require("../model/tour");
 const Booking = require('../model/booking');
 const BookingPerson = require("../model/bookingPerson");
+const nodemailer = require("nodemailer");
+// const {  sendMail } = require("../utils/nodemailer");
+const helloWorld = require("../utils/nodemailer");
+const sendMail = require("../utils/nodemailer");
+const { NotFillApplicationBody} = require("../utils/emailMessage")
+const { NotFillApplicationSubject} = require("../utils/emailSubject")
 
 require("dotenv").config();
 
@@ -90,14 +96,11 @@ router.post("/getUniqueSeatNumberByHotelId", async (req, res) => {
   const tourId = req.body.tourId;
   const roomId = req.body.roomId;
   const bookingId = req.body.bookingId;
-  // using bookingId we find the persons 
   const personListInfo = await BookingPerson.find({booking_id: bookingId}).select({persons:1})
-  console.log(personListInfo[0].persons,"person")
-  const personList =personListInfo[0].persons;
+  const personList = personListInfo.length > 0 ? personListInfo[0].persons : [];
   const hotelSeats = await HotelRooms.find({ name: name,tour_id: tourId,roomId: roomId }).distinct('seat_no')
   const tourInfo = await Tour.find({_id: tourId}).select({'_id': 1,'name': 1})
   const count = hotelSeats.length;
-  // const response = {hotelSeats,count} 
   res.send({ hotelSeats: hotelSeats, personList:personList, tourInfo:tourInfo, count,roomId, hotel : name });
 });
 
@@ -125,6 +128,17 @@ router.post("/assignHotelForTour",async (req, res) =>{
   }
 
 })
+
+
+/**email send */
+router.get("/mail-send",async(req,res)=>{
+    const sendEmail = await sendMail(NotFillApplicationSubject,NotFillApplicationBody);
+    if(!sendEmail){
+      res.send({message: "Email Sent successfully"})
+    }else{
+      res.send({message: "Email Sent Not Successfully"})
+    }
+});
 
 
 
