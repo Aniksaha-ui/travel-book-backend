@@ -45,7 +45,7 @@ app.get("/", (req, res) => {
 app.use("/banner", bannerHandler);
 app.use("/tour", tourHandler);
 app.use("/booking", bookingHandler);
-app.use("/booking-persons",bookingPersonHandler);
+app.use("/booking-persons", bookingPersonHandler);
 app.use("/user", userHandler);
 app.use("/blog", blogHandler);
 app.use("/transection", transectionHandler);

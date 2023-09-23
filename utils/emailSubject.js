@@ -1,3 +1,4 @@
 const TourRegistationSubject = "Tour Registation";
 const NotFillApplicationSubject = "Application Fillup";
-module.exports = {TourRegistationSubject,NotFillApplicationSubject}
+const TransectionApproveSubject = "Transection Status";
+module.exports = {TourRegistationSubject,NotFillApplicationSubject,TransectionApproveSubject}

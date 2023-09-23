@@ -7,8 +7,8 @@ const Booking = require("../model/booking");
 const Tour = require("../model/tour");
 const Transection = require("../model/transection");
 const sendMail = require("../utils/nodemailer");
-const { TourRegistationBody} = require("../utils/emailMessage")
-const { TourRegistationSubject} = require("../utils/emailSubject")
+const { TourRegistationBody } = require("../utils/emailMessage");
+const { TourRegistationSubject } = require("../utils/emailSubject");
 require("dotenv").config();
 // verify jwt
 function verifyJWT(req, res, next) {
@@ -51,16 +51,7 @@ router.post("/", async (req, res) => {
   try {
     const bookingList = await book.save();
     if (bookingList) {
-      /** Sending Email */
-      const sendEmail = await sendMail(TourRegistationSubject,TourRegistationBody,req.body.email);
-      if(!sendEmail){
-        res.send({message: "Email Sent successfully"})
-      }else{
-        res.send({message: "Email Sent Not Successfully"})
-      }
-      /** Sending Email End*/
       res.send(bookingList);
-      
     } else {
       res.send({ message: "Data can not be inserted" });
     }
@@ -172,7 +163,7 @@ router.get("/users/:tourId", async (req, res) => {
     console.log(tourId);
     const query = {};
     // console.log(req.body);
-    const booking = await Booking.find({ payment: "yes",tourId : tourId });
+    const booking = await Booking.find({ payment: "yes", tourId: tourId });
     if (booking.length > 0) {
       res.send({ status: 200, data: booking });
     }
