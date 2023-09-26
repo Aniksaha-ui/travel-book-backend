@@ -9,6 +9,8 @@ const Transection = require("../model/transection");
 const sendMail = require("../utils/nodemailer");
 const { TourRegistationBody } = require("../utils/emailMessage");
 const { TourRegistationSubject } = require("../utils/emailSubject");
+const BookingPerson = require("../model/bookingPerson");
+
 require("dotenv").config();
 // verify jwt
 function verifyJWT(req, res, next) {
@@ -168,6 +170,26 @@ router.get("/users/:tourId", async (req, res) => {
       res.send({ status: 200, data: booking });
     }
   } catch (err) {}
+});
+
+router.get("/getBookingNumberOfPerson/:bookingid", async (req, res) => {
+  const id = req.params.bookingid;
+  try {
+    const isExist = await BookingPerson.find({ booking_id: id });
+    if (isExist.length > 0) {
+      res.send({ code: "100", status: "fail", message: "Already exists" });
+    }
+    const getBooking = await Booking.find({ _id: id }).select({
+      tourId: 1,
+      tourName: 1,
+      numberOfPerson: 1,
+      email: 1,
+      phone: 1,
+    });
+    res.send({ code: "200", status: "success", data: getBooking });
+  } catch (err) {
+    res.send({ message: "Error in getting booking" });
+  }
 });
 
 module.exports = router;
